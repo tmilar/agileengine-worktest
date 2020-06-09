@@ -43,7 +43,9 @@ export class AgileEngineClient {
 
     if (page !== undefined) {
       Object.assign(requestOptions, {
-        qs: page
+        qs: {
+          page
+        }
       })
     }
 
