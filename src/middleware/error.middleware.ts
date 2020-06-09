@@ -1,4 +1,4 @@
-import {NextFunction, Request, Response} from "express"
+import { NextFunction, Request, Response } from "express"
 import HttpException from "../exception/http-exception"
 
 export default function errorMiddleware(

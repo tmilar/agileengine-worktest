@@ -5,7 +5,8 @@
   "author": "Tomas Milar <tomasmilar4@gmail.com>",
   "scripts": {
     "start": "ts-node src/server.ts",
-    "test": "npx mocha --recursive \"test/**/*.test.ts\""
+    "test": "npx mocha --recursive \"test/**/*.test.ts\"",
+    "lint:fix": "tsc --noEmit && npx eslint \"**/*.{js,ts}\" --fix"
   },
   "devDependencies": {
     "@types/chai": "4.2.11",
