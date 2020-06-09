@@ -3,6 +3,7 @@ import { UrlOptions } from "request"
 
 import { AGILEENGINE_API_KEY as apiKey } from "../util/secrets"
 import logger from "../util/logger"
+import { cachedImages } from "../util/cache"
 
 export const baseUrl = "http://interview.agileengine.com"
 export const authUrl = `${baseUrl}/auth`
@@ -52,12 +53,36 @@ export class AgileEngineClient {
     return this._authorizedRequest(requestOptions)
   }
 
+  /**
+   * Get details of an image specified by id.
+   *
+   * @param id
+   */
   async getImageDetails(id: string): Promise<ImageDetails> {
     const requestOptions = {
       url: imageDetailsUrl(id)
     }
 
     return this._authorizedRequest(requestOptions)
+  }
+
+  /**
+   * Retrieve all pictures that match the search term in any of the pictures metadata fields.
+   *
+   * Return pictures with meta text that satisfy all of the search query words.
+   *
+   * @param searchQuery
+   */
+  searchPictures(searchQuery: string): ImageDetails[] {
+    const words = searchQuery.toLowerCase().split(" ")
+
+    const results = cachedImages.filter((imageDetails) => {
+      const { camera, author, tags } = imageDetails
+      const searchTarget = `${camera} ${author} ${tags}`.toLowerCase()
+      return words.every((word) => searchTarget.indexOf(word) > -1)
+    })
+
+    return results
   }
 
   /**

@@ -1,19 +1,19 @@
 import { AgileEngineClient, ImageDetails, ImagesResponse } from "../service/image-client"
 import logger from "./logger"
 
-const agileEngineClient = new AgileEngineClient()
-
-export let cache: Map<string, ImageDetails> = new Map()
+export let cachedImages: ImageDetails[] = []
 
 interface CacheConfig {
   refreshInterval?: number
 }
 
+let agileEngineClient: AgileEngineClient
+
 /**
  * Fetch all pictures with details, and re-fresh the cache
  * @param cacheConfig
  */
-export async function load(cacheConfig: CacheConfig = {}) {
+export async function load(cacheConfig: CacheConfig = {}): Promise<void> {
   const { refreshInterval } = cacheConfig
 
   if (refreshInterval === undefined || refreshInterval === 0) {
@@ -22,11 +22,16 @@ export async function load(cacheConfig: CacheConfig = {}) {
     return
   }
 
+  if (agileEngineClient === undefined) {
+    // init API client only once
+    agileEngineClient = new AgileEngineClient()
+  }
+
   // fetch all pictures with details
   const allImages = await fetchAllPictures()
 
   // replace current cache instance with the fresher one
-  cache = initCache(allImages)
+  cachedImages = allImages
 
   scheduleCacheRefresh(cacheConfig)
 }
@@ -38,23 +43,12 @@ function scheduleCacheRefresh(cacheConfig: CacheConfig) {
   setTimeout(
     () =>
       load(cacheConfig).then(() =>
-        logger.debug(`Refreshed cache with ${cache.size} entries at ${new Date().toISOString()}`)
+        logger.debug(
+          `Refreshed cache with ${cachedImages.length} entries at ${new Date().toISOString()}`
+        )
       ),
     refreshInterval
   )
-}
-
-/**
- * Initialize a fresh cache
- * @param pictures
- */
-function initCache(pictures: Array<ImageDetails>) {
-  const freshCache = new Map()
-  // store in a new cache map
-  for (const image of pictures) {
-    freshCache.set(image.id, image)
-  }
-  return freshCache
 }
 
 async function fetchAllPictures() {

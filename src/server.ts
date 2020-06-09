@@ -1,5 +1,5 @@
 import app from "./app"
-import { cache, load } from "./util/cache"
+import { cachedImages, load } from "./util/cache"
 import logger from "./util/logger"
 import { CACHE_REFRESH_INTERVAL } from "./util/secrets"
 
@@ -12,7 +12,9 @@ const server = app.listen(app.get("port"), () => {
 })
 
 load({ refreshInterval: CACHE_REFRESH_INTERVAL }).then(() =>
-  logger.debug(`Initialized cache with ${cache.size} entries at ${new Date().toISOString()}`)
+  logger.debug(
+    `Initialized cache with ${cachedImages.length} entries at ${new Date().toISOString()}`
+  )
 )
 
 export default server

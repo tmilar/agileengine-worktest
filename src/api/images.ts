@@ -29,6 +29,20 @@ export async function getImageDetails(
   }
 }
 
+export async function searchImagesByString(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const { searchTerm } = req.params
+    const foundPictures = await agileEngine.searchPictures(searchTerm)
+    res.json(foundPictures)
+  } catch (error) {
+    next(error)
+  }
+}
+
 function _parsePageQueryParam(req: Request) {
   const { page: pageQueryParam } = req.query
   const page = Number(pageQueryParam)
