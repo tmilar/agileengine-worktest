@@ -11,6 +11,7 @@ if (!fs.existsSync(".env")) {
 dotenv.config({ path: ".env" })
 logger.debug("Loaded .env file")
 
+// export const NODE_ENV = process.env.NODE_ENV
 export const AGILEENGINE_API_KEY = process.env.AGILEENGINE_API_KEY
 
 export const CACHE_REFRESH_INTERVAL = Number(process.env.CACHE_REFRESH_INTERVAL)
