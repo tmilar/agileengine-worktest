@@ -15,3 +15,8 @@ logger.debug("Loaded .env file")
 export const AGILEENGINE_API_KEY = process.env.AGILEENGINE_API_KEY
 
 export const CACHE_REFRESH_INTERVAL = Number(process.env.CACHE_REFRESH_INTERVAL)
+
+if (AGILEENGINE_API_KEY === undefined || AGILEENGINE_API_KEY === "") {
+  logger.error("AGILEENGINE_API_KEY env var must be defined.")
+  process.exit(1)
+}

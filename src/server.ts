@@ -11,10 +11,16 @@ const server = app.listen(app.get("port"), () => {
   console.log("  Press CTRL-C to stop\n")
 })
 
-load({ refreshInterval: CACHE_REFRESH_INTERVAL }).then(() =>
-  logger.debug(
-    `Initialized cache with ${cachedImages.length} entries at ${new Date().toISOString()}`
+load({ refreshInterval: CACHE_REFRESH_INTERVAL })
+  .then(() =>
+    logger.debug(
+      `Initialized cache with ${cachedImages.length} entries at ${new Date().toISOString()}`
+    )
   )
-)
+  .catch((error) => {
+    const errMsg = `Unexpected error from cache: ${error.message || error}`
+    logger.error(errMsg)
+    process.exit(1)
+  })
 
 export default server
