@@ -25,13 +25,11 @@ describe("AgileEngine Service", () => {
     const imageDetailsResource = imageDetailsUrl(imageId).replace(baseUrl, "")
 
     // mock API auth response
-    nock(baseUrl)
-      .post(authResource)
-      .reply(200, authResponse)
+    nock(baseUrl).post(authResource).reply(200, authResponse)
 
     const nockAuthScope = nock(baseUrl, {
       reqheaders: {
-        authorization: authHeaderValue => authHeaderValue.includes(authResponse.token)
+        authorization: (authHeaderValue) => authHeaderValue.includes(authResponse.token)
       }
     })
 
