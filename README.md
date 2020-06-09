@@ -14,6 +14,17 @@ Some tests have been provided as well, implemented with Mocha & Chai, and Nock f
 ```
 npm install
 ```
+Then, create an `.env` file based on the provided `.env.example`. The following env vars should be provided:
+
+```
+# your Agile Engine API Key
+AGILEENGINE_API_KEY=
+
+# the refresh interval of the local cache, in ms (use '0' or empty for no cache)
+CACHE_REFRESH_INTERVAL=1000
+```
+
+
 
 ## Testing
 
