@@ -14,18 +14,18 @@ export interface Image {
   cropped_picture: string
 }
 
+export interface ImageDetails extends Image {
+  camera: string
+  author: string
+  tags: string
+  full_picture: string
+}
+
 export interface ImagesResponse {
   pictures: Array<Image>
   page: number
   pageCount: number
   hasMore: boolean
-}
-
-export interface ImageDetailsResponse extends Image {
-  camera: string
-  author: string
-  tags: string
-  full_picture: string
 }
 
 export class AgileEngineClient {
@@ -52,7 +52,7 @@ export class AgileEngineClient {
     return this._authorizedRequest(requestOptions)
   }
 
-  async getImageDetails(id: string): Promise<ImageDetailsResponse> {
+  async getImageDetails(id: string): Promise<ImageDetails> {
     const requestOptions = {
       url: imageDetailsUrl(id)
     }
@@ -83,7 +83,10 @@ export class AgileEngineClient {
       ...requestOptions
     })
 
-    const _authorizedRequest = () => request(authorizedRequestOptions())
+    const _authorizedRequest = () => {
+      const _authorizedReqOpts = authorizedRequestOptions()
+      return request(_authorizedReqOpts)
+    }
 
     try {
       return _authorizedRequest()

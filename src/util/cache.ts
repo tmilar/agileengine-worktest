@@ -14,17 +14,26 @@ interface CacheConfig {
  * @param cacheConfig
  */
 export async function load(cacheConfig: CacheConfig = {}) {
+  const { refreshInterval } = cacheConfig
+
+  if (refreshInterval === undefined || refreshInterval === 0) {
+    // don't setup cache if refresh interval is undefined or 0
+    logger.info(`Skipping cache load (refreshInterval is ${refreshInterval})`)
+    return
+  }
+
   // fetch all pictures with details
   const allImages = await fetchAllPictures()
 
   // replace current cache instance with the fresher one
   cache = initCache(allImages)
 
+  scheduleCacheRefresh(cacheConfig)
+}
+
+function scheduleCacheRefresh(cacheConfig: CacheConfig) {
   const { refreshInterval } = cacheConfig
 
-  if (refreshInterval === undefined) {
-    return
-  }
   logger.info(`Refreshing cache in ${refreshInterval}ms...`)
   setTimeout(
     () =>
@@ -33,6 +42,19 @@ export async function load(cacheConfig: CacheConfig = {}) {
       ),
     refreshInterval
   )
+}
+
+/**
+ * Initialize a fresh cache
+ * @param pictures
+ */
+function initCache(pictures: Array<ImageDetails>) {
+  const freshCache = new Map()
+  // store in a new cache map
+  for (const image of pictures) {
+    freshCache.set(image.id, image)
+  }
+  return freshCache
 }
 
 async function fetchAllPictures() {
@@ -72,17 +94,4 @@ async function _getImagesWithDetails(
     images,
     picturesWithDetails
   }
-}
-
-/**
- * Initialize a fresh cache
- * @param allImages
- */
-function initCache(allImages: ImageDetails[]) {
-  const freshCache = new Map()
-  // store in a new cache map
-  for (const image of allImages) {
-    freshCache.set(image.id, image)
-  }
-  return freshCache
 }
