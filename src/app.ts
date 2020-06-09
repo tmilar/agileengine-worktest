@@ -2,7 +2,7 @@ import express from "express"
 import bodyParser from "body-parser"
 
 import errorMiddleware from "./middleware/error.middleware"
-import { getImages } from "./api/images"
+import { getImageDetails, getImages } from "./api/images"
 
 // Create Express server
 const app = express()
@@ -18,5 +18,6 @@ app.use(errorMiddleware)
 
 // API endpoints
 app.get("/images", getImages)
+app.get("/images/:id", getImageDetails)
 
 export default app

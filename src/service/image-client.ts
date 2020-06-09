@@ -7,6 +7,7 @@ import logger from "../util/logger"
 export const baseUrl = "http://interview.agileengine.com"
 export const authUrl = `${baseUrl}/auth`
 export const imagesUrl = `${baseUrl}/images`
+export const imageDetailsUrl = (id: string) => `${baseUrl}/images/${id}`
 
 export interface Image {
   id: string
@@ -18,6 +19,13 @@ export interface ImagesResponse {
   page: number
   pageCount: number
   hasMore: boolean
+}
+
+export interface ImageDetailsResponse extends Image {
+  camera: string
+  author: string
+  tags: string
+  full_picture: string
 }
 
 export class AgileEngineClient {
@@ -37,6 +45,14 @@ export class AgileEngineClient {
       Object.assign(requestOptions, {
         qs: page
       })
+    }
+
+    return this._authorizedRequest(requestOptions)
+  }
+
+  async getImageDetails(id: string): Promise<ImageDetailsResponse> {
+    const requestOptions = {
+      url: imageDetailsUrl(id)
     }
 
     return this._authorizedRequest(requestOptions)

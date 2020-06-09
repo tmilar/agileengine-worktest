@@ -50,3 +50,12 @@ export const images = {
   pageCount: 26,
   hasMore: true
 }
+
+export const imageDetails = {
+  id: "e9e5c1d285a133340fe2",
+  author: "Back Boss",
+  camera: "Sony Cyber-shot RX10 III",
+  tags: "#wonderfullife ",
+  cropped_picture: "http://interview.agileengine.com/pictures/cropped/0002.jpg",
+  full_picture: "http://interview.agileengine.com/pictures/full_size/0002.jpg"
+}
