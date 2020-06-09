@@ -12,7 +12,8 @@
     "inlineSources": true,
     "esModuleInterop": true,
     "sourceRoot": "./src",
-    "baseUrl": "."
+    "baseUrl": ".",
+    "skipLibCheck": true
   },
   "include": ["./**/*.ts"],
   "exclude": [
